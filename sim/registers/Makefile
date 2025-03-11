@@ -1,4 +1,5 @@
-TARGET = b_type
+TARGET = registers
+
 
 all: vlog vsim
 
