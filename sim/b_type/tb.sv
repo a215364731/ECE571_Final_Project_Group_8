@@ -20,7 +20,7 @@ module b_type_tb;
         in1 = 32'h1;
         in2 = 32'h1;
         pc = $urandom();
-        #1 assert (iaddr == (pc + imm));
+        #1 assert (iaddr == (pc + {{20{imm[11]}}, imm}));
         in2 = 32'h2;
         #1 assert (iaddr == (pc + 4));
 
@@ -29,7 +29,7 @@ module b_type_tb;
         in1 = 32'h1;
         in2 = 32'h2;
         pc = $urandom();
-        #1 assert (iaddr == (pc + imm));
+        #1 assert (iaddr == (pc + {{20{imm[11]}}, imm}));
         in2 = 32'h1;
         #1 assert (iaddr == (pc + 4));
 
@@ -39,7 +39,7 @@ module b_type_tb;
         in1 = 32'h1;
         in2 = 32'h4;
         pc = $urandom();
-        #1 assert (iaddr == (pc + imm));
+        #1 assert (iaddr == (pc + {{20{imm[11]}}, imm}));
         in2 = 32'h0;
         #1 assert (iaddr == (pc + 4));
 
@@ -48,7 +48,7 @@ module b_type_tb;
         in1 = 32'h1;
         in2 = 32'h4;
         pc = $urandom();
-        #1 assert (iaddr == (pc + imm));
+        #1 assert (iaddr == (pc + {{20{imm[11]}}, imm}));
         in2 = 32'h0;
         #1 assert (iaddr == (pc + 4));
 

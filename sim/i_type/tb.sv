@@ -17,25 +17,25 @@ module i_type_tb;
         funct3 = 3'h0;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
-        #1 assert (out == (imm + in1));
+        #1 assert (out == ({{20{imm[11]}}, imm} + in1));
 
         // xori
         funct3 = 3'h4;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
-        #1 assert (out == (imm ^ in1));
+        #1 assert (out == ({{20{imm[11]}}, imm} ^ in1));
 
         // ori
         funct3 = 3'h6;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
-        #1 assert (out == (imm | in1));
+        #1 assert (out == ({{20{imm[11]}}, imm} | in1));
 
         // andi
         funct3 = 3'h7;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
-        #1 assert (out == (imm & in1));
+        #1 assert (out == ({{20{imm[11]}}, imm} & in1));
 
         // slli
         funct3 = 3'h1;
@@ -62,7 +62,7 @@ module i_type_tb;
         funct3 = 3'h2;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
-        #1 assert (out == (($signed(in1) < $signed(imm))?1:0));
+        #1 assert (out == (($signed(in1) < {{20{imm[11]}}, imm})?1:0));
 
         // sltiu
         funct3 = 3'h3;

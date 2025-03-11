@@ -18,7 +18,7 @@ module registers_tb;
     end
 
     task initialize_mem;
-        for(int i = 0; i < 32; i++) begin
+        for(int i = 1; i < 32; i++) begin
             @(posedge clk);
             rd = i;
             rd_data = i;
@@ -37,16 +37,16 @@ module registers_tb;
         
         
         for(int i = 0; i < 16; i++) begin
-            @(posedge clk);
-            data_addr = $urandom_range(31);
+            data_addr = $urandom_range(1,31);
             rs1 = data_addr;
+            @(posedge clk);
             assert (rs1_data == data_addr);
         end
 
         for(int i = 0; i < 16; i++) begin
-            @(posedge clk);
-            data_addr = $urandom_range(31);
+            data_addr = $urandom_range(1,31);
             rs2 = data_addr;
+            @(posedge clk);
             assert (rs2_data == data_addr);
         end
 

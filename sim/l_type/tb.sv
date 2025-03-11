@@ -21,7 +21,7 @@ module l_type_tb;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
         #1 assert (out == {24'h0,d_data[7:0]});
-        assert (d_addr == ($signed(in1) + $signed(imm)));
+        assert (d_addr == (in1 + {{20{imm[11]}}, imm}));
 
         // lh
         funct3 = 3'h1;
@@ -29,7 +29,7 @@ module l_type_tb;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
         #1 assert (out == {16'h0,d_data[15:0]});
-        assert (d_addr == ($signed(in1) + $signed(imm)));
+        assert (d_addr == (in1 + {{20{imm[11]}}, imm}));
 
         // lb
         funct3 = 3'h2;
@@ -37,7 +37,7 @@ module l_type_tb;
         imm = $urandom_range(2**12 - 1);
         in1 = $urandom();
         #1 assert (out == d_data);
-        assert (d_addr == ($signed(in1) + $signed(imm)));
+        assert (d_addr == (in1 + {{20{imm[11]}}, imm}));
 
         // lbu
         funct3 = 3'h4;
