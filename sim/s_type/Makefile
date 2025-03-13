@@ -1,4 +1,4 @@
-TARGET = b_type
+TARGET = s_type
 
 
 all: vlog vsim

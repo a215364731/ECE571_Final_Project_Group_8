@@ -15,11 +15,11 @@ module dmem_tb;
     end
 
     task initialize_mem;
-        for(int i = 0; i < 64; i++) begin
+        for(int i = 0; i < 16384; i++) begin
             @(posedge clk);
-            wr_addr = (i * 4);
-            wr_data = {(i*4), (i*4) + 1, (i*4) + 2, (i*4) + 3};
-            wr_en = 1;
+            wr_addr = i*4;
+            wr_data = i*4;
+            wr_en = 4'b1111;
         end
         @(posedge clk);
         wr_en = 0;
@@ -34,9 +34,9 @@ module dmem_tb;
         
         
         for(int i = 0; i < 100; i++) begin
-            @(posedge clk);
-            data_addr = $urandom_range(255) * 4;
+            data_addr = $urandom_range(16383) * 4;
             rd_addr = data_addr;
+            @(posedge clk);
             assert (rd_data == data_addr);
         end
 
