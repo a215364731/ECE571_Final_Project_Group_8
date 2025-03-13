@@ -1,18 +1,7 @@
-/* module b_type(
-    input  logic [6:0]  opcode,
-    input  logic [2:0]  funct3,
-    input  logic [12:0] imm,
-    input  logic [31:0] in1, in2, // Data of rs1 and rs2
-    input  logic [31:0] pc,
-    output logic [31:0] iaddr // next instruction addr: either branch imm or pc + 4
-);
-
-endmodule */
-
 module b_type(
     input  logic [6:0]  opcode,      // opcode of the instruction
     input  logic [2:0]  funct3,      // funct3 field of the instruction
-    input  logic [11:0] imm,         // 12-bit immediate for branch offset
+    input  logic [12:0] imm,         // 13-bit immediate for branch offset
     input  logic [31:0] in1, in2,    // Data from registers rs1 and rs2
     input  logic [31:0] pc,          // Current PC (Program Counter)
     output logic [31:0] iaddr       // next instruction address: branch or pc+4
@@ -21,7 +10,7 @@ module b_type(
     // Decode the branch condition based on funct3
     logic branch_taken;
     always_comb begin
-        case (funct3)
+        case (funct3 && opcode ==  7'b1100011 )
             3'b000: branch_taken = (in1 == in2);        // BEQ: Branch if equal
             3'b001: branch_taken = (in1 != in2);        // BNE: Branch if not equal
             3'b100: branch_taken = (in1 < in2);         // BLT: Branch if less than (signed)
@@ -35,18 +24,22 @@ module b_type(
     // Calculate the branch target address
     logic [31:0] branch_target;
     always_comb begin
+     if(opcode ==  7'b1100011 ) begin
         // The imm field represents a 12-bit signed immediate
         // We need to sign-extend it and shift it left by 1 (because it's a byte offset)
-        branch_target = pc + (imm << 1); // imm is 12-bit, so we shift it left by 1 bit
+        branch_target = pc + 32'(signed'(imm)); // imm is 12-bit, so we shift it left by 1 bit
+     end
     end
 
     // Output the next instruction address
     always_comb begin
+    if(opcode ==  7'b1100011 ) begin
         if (branch_taken) begin
             iaddr = branch_target; // Branch taken: use the calculated branch target
         end else begin
             iaddr = pc + 4;         // Branch not taken: use PC + 4 (next sequential instruction)
         end
+    end
     end
 
 endmodule
