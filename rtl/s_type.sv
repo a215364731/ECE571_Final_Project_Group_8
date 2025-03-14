@@ -12,19 +12,18 @@ module s_type(
 
     always_comb begin
         d_data = in2;  
-        wr_en = 4'b0000; 
-
-        case (opcode && opcode ==  7'b0100011)
-            7'b0100011: begin 
-                case (funct3[2:0]) 
-                    2'b00: wr_en = 4'b0001; 
-                    2'b01: wr_en = 4'b0011; 
-                    2'b10: wr_en = 4'b1111; 
-                    default: wr_en = 4'b0000; 
-                endcase
-            end
-            default: wr_en = 4'b0000; 
-        endcase
+        wr_en = 4'b0000;
+            case (opcode)
+                7'b0100011: begin 
+                    case (funct3[2:0]) 
+                        2'b00: wr_en = 4'b0001; 
+                        2'b01: wr_en = 4'b0011; 
+                        2'b10: wr_en = 4'b1111; 
+                        default: wr_en = 4'b0000; 
+                    endcase
+                end
+                default: wr_en = 4'b0000;
+            endcase
     end
 
 endmodule

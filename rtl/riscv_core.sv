@@ -53,6 +53,7 @@ logic reg_wr_en;
 logic [3:0] dmem_wr_en;
 logic [4:0] rs1, rs2, rd;
 logic [31:0] rs1_data, rs2_data, rd_data;
+logic [31:0] i_rd_data, r_rd_data, l_rd_data;
 
 always_ff @(posedge clk) begin
     if(~reset_n) pc <= '0;
@@ -66,6 +67,7 @@ always_comb begin
     rs1 = 5'h0;
     rs2 = 5'h0;
     rd = 5'h0;
+    rd_data = 32'h0;
     case(instruction.flat[6:0])
         //r type
         7'b0110011: begin
@@ -73,13 +75,14 @@ always_comb begin
             rs1 = instruction.r.rs1;
             rs2 = instruction.r.rs2;
             rd = instruction.r.rd;
+            rd_data = r_rd_data;
         end
         //i type
         7'b0010011: begin
             reg_wr_en = 1'b1;
             rs1 = instruction.i.rs1;
-            rs2 = 5'h0;
             rd = instruction.i.rd;
+            rd_data = i_rd_data;
         end
         //s type
         7'b0100011: begin
@@ -92,6 +95,7 @@ always_comb begin
             reg_wr_en = 1'b1;
             rs1 = instruction.i.rs1;
             rd = instruction.i.rd;
+            rd_data = l_rd_data;
         end
         //b type
         7'b1100011: begin
@@ -129,7 +133,7 @@ r_type r_type_i(
     .funct7(instruction.r.funct7),
     .in1(rs1_data),
     .in2(rs2_data),
-    .out(rd_data)
+    .out(r_rd_data)
 );
 
 i_type i_type_i(
@@ -137,12 +141,12 @@ i_type i_type_i(
     .funct3(instruction.i.funct3),
     .imm(instruction.i.imm),
     .in1(rs1_data),
-    .out(rd_data)
+    .out(i_rd_data)
 );
 
 s_type s_type_i(
     .opcode(instruction.s.opcode),
-    .funct7({instruction.s.imm7,instruction.s.imm5}),
+    .imm({instruction.s.imm7,instruction.s.imm5}),
     .in1(rs1_data),
     .in2(rs2_data),
     .d_addr(d_wr_addr),
@@ -157,7 +161,7 @@ l_type l_type_i(
     .in1(rs1_data),
     .d_addr(d_rd_addr),
     .d_data(d_rd_data),
-    .out(rd_data)
+    .out(l_rd_data)
 );
 
 b_type b_type_i(

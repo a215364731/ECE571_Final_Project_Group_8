@@ -9,32 +9,32 @@ module b_type(
 
     logic branch_taken;
     always_comb begin
-        case (funct3 && opcode ==  7'b1100011 )
-            3'b000: branch_taken = (in1 == in2);
-            3'b001: branch_taken = (in1 != in2);
-            3'b100: branch_taken = (in1 < in2);
-            3'b101: branch_taken = (in1 >= in2);
-            3'b110: branch_taken = ($unsigned(in1) < $unsigned(in2));
-            3'b111: branch_taken = ($unsigned(in1) >= $unsigned(in2));
-            default: branch_taken = 1'b0;
-        endcase
+        if(opcode ==  7'b1100011 ) begin
+            case (funct3)
+                3'b000: branch_taken = (in1 == in2);
+                3'b001: branch_taken = (in1 != in2);
+                3'b100: branch_taken = (in1 < in2);
+                3'b101: branch_taken = (in1 >= in2);
+                3'b110: branch_taken = ($unsigned(in1) < $unsigned(in2));
+                3'b111: branch_taken = ($unsigned(in1) >= $unsigned(in2));
+                default: branch_taken = 1'b0;
+            endcase
+        end else begin
+            branch_taken = 1'b0;
+        end
     end
 
     logic [31:0] branch_target;
     always_comb begin
-     if(opcode ==  7'b1100011 ) begin
-        branch_target = pc + 32'(signed'(imm)); 
-     end
+        branch_target = pc + {{20{imm[12]}}, imm};
     end
 
     always_comb begin
-    if(opcode ==  7'b1100011 ) begin
         if (branch_taken) begin
             iaddr = branch_target;
         end else begin
             iaddr = pc + 4;
         end
-    end
     end
 
 endmodule

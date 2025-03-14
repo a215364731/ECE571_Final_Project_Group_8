@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+
 module imem(
     input logic [31:0] addr,    // 32-bit input address
     output logic [31:0] data    // 32-bit output instruction data 
