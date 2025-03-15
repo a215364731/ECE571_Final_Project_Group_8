@@ -12,11 +12,17 @@ always_comb begin
             d_addr = in1 + {{20{imm[11]}}, imm};
 
             case (funct3)
-                3'b000: out = {{24{d_data[7]}}, d_data[7:0]};
-                3'b001: out = {{16{d_data[15]}}, d_data[15:0]};
+                3'b000: out = {24'h0, d_data[7:0]};
+                3'b001: out = {16'h0, d_data[15:0]};
                 3'b010: out = d_data; 
-                3'b100: out = {24'b0, d_data[7:0]}; 
-                3'b101: out = {16'b0, d_data[15:0]};
+                3'b100: begin
+                    d_addr = in1 + imm;
+                    out = {24'b0, d_data[7:0]}; 
+                end
+                3'b101: begin
+                    d_addr = in1 + imm;
+                    out = {16'b0, d_data[15:0]};
+                end
                 default: out = 32'bx;
             endcase
         end else begin
