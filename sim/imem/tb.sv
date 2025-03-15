@@ -17,7 +17,7 @@ module imem_tb;
             test_addr = $urandom_range(255) * 4;
             addr = test_addr;
             #1;
-            assert (data == mem[addr]);
+            assert (data == mem[addr[31:2]]);
         end
         
 

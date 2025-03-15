@@ -9,7 +9,7 @@ module imem(
         $readmemh("imem_ini.mem", i_arr);
     end
 
-    assign data = i_arr[{addr[31:2],2'h0}];
+    assign data = i_arr[{addr[31:2]}];
 
 endmodule
 

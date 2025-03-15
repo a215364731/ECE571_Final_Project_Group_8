@@ -113,11 +113,16 @@ imem imem_i(
 
 dmem dmem_i(
     .clk(clk),
-    .wr_addr(wr_addr)
+    .wr_addr(d_wr_addr),
+    .wr_data(d_wr_data),
+    .wr_en(dmem_wr_en),
+    .rd_addr(d_rd_addr),
+    .rd_data(d_rd_data)
 );
 
 registers registers_i(
     .clk(clk),
+    .reset(~reset_n),
     .rs1(rs1),
     .rs2(rs2),
     .rd(rd),
@@ -147,6 +152,7 @@ i_type i_type_i(
 s_type s_type_i(
     .opcode(instruction.s.opcode),
     .imm({instruction.s.imm7,instruction.s.imm5}),
+    .funct3(instruction.s.funct3),
     .in1(rs1_data),
     .in2(rs2_data),
     .d_addr(d_wr_addr),
@@ -167,11 +173,11 @@ l_type l_type_i(
 b_type b_type_i(
     .opcode(instruction.b.opcode),
     .funct3(instruction.b.funct3),
-    .imm({instruction.b.imm7[6],instruction.b.imm5[0],instruction.b.imm7[5:0],instruction.b.imm5[4:1]}),
+    .imm({instruction.b.imm7[6],instruction.b.imm5[0],instruction.b.imm7[5:0],instruction.b.imm5[4:1], 1'b0}),
     .in1(rs1_data),
     .in2(rs2_data),
     .pc(pc),
-    .pc_next(pc_next)
+    .iaddr(pc_next)
 );
 
 

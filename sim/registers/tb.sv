@@ -2,6 +2,7 @@ module registers_tb;
 
 
     logic clk;
+    logic reset;
     logic [4:0] rs1;
     logic [4:0] rs2;
     logic [4:0] rd;
@@ -30,11 +31,15 @@ module registers_tb;
 
     int data_addr;
     initial begin
+        @(posedge clk) reset = 1;
+        @(posedge clk) reset = 0;
         $monitor("rs1: 0x%x, rs2: 0x%x, rs1_data: 0x%x, rs2_data: 0x%x", rs1, rs2, rs1_data, rs2_data);
         // Deposit data that matches the address
         initialize_mem();
         @(posedge clk);
-        
+        rs1 = '0;
+        @(posedge clk);
+        assert (rs1_data == 32'h0);
         
         for(int i = 0; i < 16; i++) begin
             data_addr = $urandom_range(1,31);

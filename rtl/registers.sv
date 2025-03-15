@@ -1,5 +1,5 @@
 module registers(
-    input logic clk,
+    input logic clk, reset,
     input logic [4:0] rs1,
     input logic [4:0] rs2,
     input logic [4:0] rd,
@@ -20,8 +20,14 @@ logic [31:0] regfile [31:0];
     assign rs2_data = regfile[rs2];
 
     always_ff @(posedge clk) begin
-        if (reg_wr_en && rd != 0) 
-            regfile[rd] <= rd_data;
+        if(reset) begin
+            for (int i = 0; i < 32; i++) begin
+                regfile[i] <= 32'h0;
+            end
+        end else begin
+            if (reg_wr_en && rd != 0) 
+                regfile[rd] <= rd_data;
+        end
     end
 
 endmodule
